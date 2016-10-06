@@ -15,6 +15,4 @@ function calculate_kappa
   [slope, intercept] = logfit(chi_values, order_params, 'loglog')
   beta = 1/8; nu = 1;
   -Constants.kappa * beta / nu
-
-
 end
