@@ -233,7 +233,7 @@ function [imageData, alpha] = export_fig(varargin)
 % 11/09/15: Fixed issue #103: magnification must never become negative; also fixed reported error msg in parsing input params
 % 26/09/15: Alert if trying to export transparent patches/areas to non-PNG outputs (issue #108)
 % 04/10/15: Do not suggest workarounds for certain errors that have already been handled previously
-% 01/11/15: Fixed issue #112: use same renderer in print2eps as export_fig (thanks to Jesús Pestana Puerta)
+% 01/11/15: Fixed issue #112: use same renderer in print2eps as export_fig (thanks to Jesï¿½s Pestana Puerta)
 % 10/11/15: Custom GS installation webpage for MacOS. Thanks to Andy Hueni via FEX
 % 19/11/15: Fixed clipboard export in R2015b (thanks to Dan K via FEX)
 % 21/02/16: Added -c option for indicating specific crop amounts (idea by Cedric Noordam on FEX)
@@ -255,6 +255,9 @@ function [imageData, alpha] = export_fig(varargin)
     % Parse the input arguments
     fig = get(0, 'CurrentFigure');
     [fig, options] = parse_args(nargout, fig, varargin{:});
+
+    % Hard coded by Geert. There's no fucking way to make the function call work... 
+    options.transparent = true;
 
     % Ensure that we have a figure handle
     if isequal(fig,-1)
@@ -306,9 +309,9 @@ function [imageData, alpha] = export_fig(varargin)
             Xtick = make_cell(get(Hlims, 'XTickMode'));
             Ytick = make_cell(get(Hlims, 'YTickMode'));
             Ztick = make_cell(get(Hlims, 'ZTickMode'));
-            Xlabel = make_cell(get(Hlims, 'XTickLabelMode')); 
-            Ylabel = make_cell(get(Hlims, 'YTickLabelMode')); 
-            Zlabel = make_cell(get(Hlims, 'ZTickLabelMode')); 
+            Xlabel = make_cell(get(Hlims, 'XTickLabelMode'));
+            Ylabel = make_cell(get(Hlims, 'YTickLabelMode'));
+            Zlabel = make_cell(get(Hlims, 'ZTickLabelMode'));
         end
 
         % Set all axes limit and tick modes to manual, so the limits and ticks can't change
@@ -342,7 +345,7 @@ function [imageData, alpha] = export_fig(varargin)
     try
         if ~using_hg2(fig)
             annotationHandles = findall(fig,'Type','hggroup','-and','-property','Units','-and','-not','Units','norm');
-            try  % suggested by Jesús Pestana Puerta (jespestana) 30/9/2015
+            try  % suggested by Jesï¿½s Pestana Puerta (jespestana) 30/9/2015
                 originalUnits = get(annotationHandles,'Units');
                 set(annotationHandles,'Units','norm');
             catch
@@ -694,9 +697,9 @@ function [imageData, alpha] = export_fig(varargin)
             % Reset the axes limit and tick modes
             for a = 1:numel(Hlims)
                 try
-                    set(Hlims(a), 'XLimMode', Xlims{a}, 'YLimMode', Ylims{a}, 'ZLimMode', Zlims{a},... 
+                    set(Hlims(a), 'XLimMode', Xlims{a}, 'YLimMode', Ylims{a}, 'ZLimMode', Zlims{a},...
                                   'XTickMode', Xtick{a}, 'YTickMode', Ytick{a}, 'ZTickMode', Ztick{a},...
-                                  'XTickLabelMode', Xlabel{a}, 'YTickLabelMode', Ylabel{a}, 'ZTickLabelMode', Zlabel{a}); 
+                                  'XTickLabelMode', Xlabel{a}, 'YTickLabelMode', Ylabel{a}, 'ZTickLabelMode', Zlabel{a});
                 catch
                     % ignore - fix issue #4 (using HG2 on R2014a and earlier)
                 end
@@ -1269,7 +1272,7 @@ function change_rgb_to_cmyk(fname)  % convert RGB => CMYK within an EPS file
 
         % Replace all gray-scale colors
         fstrm = regexprep(fstrm, '\n([\d.]+) +GC\n', '\n0 0 0 ${num2str(1-str2num($1))} CC\n');
-        
+
         % Replace all RGB colors
         fstrm = regexprep(fstrm, '\n[0.]+ +[0.]+ +[0.]+ +RC\n', '\n0 0 0 1 CC\n');  % pure black
         fstrm = regexprep(fstrm, '\n([\d.]+) +([\d.]+) +([\d.]+) +RC\n', '\n${sprintf(''%.4g '',[1-[str2num($1),str2num($2),str2num($3)]/max([str2num($1),str2num($2),str2num($3)]),1-max([str2num($1),str2num($2),str2num($3)])])} CC\n');

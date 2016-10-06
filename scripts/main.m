@@ -9,8 +9,8 @@ function main
   % scaling_function_argument
   % data_collapse_nishino
   % find_pseudocritical_point
-  % plot_pseudocritical_temperature
+  plot_pseudocritical_temperature
   % test_accuracy_t_pseudocrit
-  calculate_kappa
+  % calculate_kappa
   % data_collapse_chi_power_law
 end

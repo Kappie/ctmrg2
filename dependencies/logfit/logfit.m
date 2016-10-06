@@ -12,11 +12,11 @@
 %               A line is then fit to the scaled data in a least squares
 %               sense.
 %               See the 'notes' section below for help choosing a method.
-% 
+%
 %   logfit(X,Y), will search through all the possible axis scalings and
 %               finish with the one that incurs the least error (with error
 %               measured as least squares on the linear-linear data.)
-% 
+%
 %   [slope, intercept, MSE, R2, S] = logfit(X,Y,graphType), returns the following:
 %                slope: The slope of the line in the log-scale units.
 %            intercept: The intercept of the line in the log-scale units.
@@ -36,21 +36,21 @@
 %                    >> are independent normal with constant variance,
 %                    >> polyval produces error bounds that contain at least
 %                    >> 50% of the predictions.
-% 
+%
 %   [graphType, slope, intercept, MSE, R2, S] = logfit(X,Y), if you choose
 %                       not to pass a 'graphType' variable, then it will go
 %                       ahead and select the one with the least square
 %                       error. The firt parameter returned will be the
 %                       graphType, with the following parameters in the
 %                       usual order.
-%               
+%
 %   logfit(X,Y,'PropertyName',PropertyValue), or
 %   logfit(X,Y,graphType,'PropertyName',PropertyValue)
-% 
+%
 %               see parameter options below
-%__________________________________________________________________________ 
+%__________________________________________________________________________
 % USER PARAMETERS:
-% 
+%
 % For skipping part of the data set:
 %       'skip': skip 'n' rows from the beginning of the data set when
 %               calculating the linear fit. Must be integer. Pass a negative
@@ -59,61 +59,61 @@
 %  'skipBegin': skip 'n' rows from the beginning when calculating the
 %               linear fit similar to skip n. 'beginSkip'
 %    'skipEnd': skip 'n' rows from the end, similar to skip -n 'endSkip'
-% 
-%__________________________________________________________________________ 
+%
+%__________________________________________________________________________
 % For plotting in different styles
 %   'fontsize': The fontsize of the axis, for axis tick labels and legend.
 %               'font','fsize'
-% 'markersize': The size of the marker for the points, 
+% 'markersize': The size of the marker for the points,
 % 'markertype': The type of marker for the points, such as 'o--' or '.r'
 %               'markerstyle','markertype','marker'
-% 
+%
 %  'linewidth': The width of the dashed line for the approximation
-% 
+%
 %       'ftir': The approximation is plotted for a range around the
 %               endpoints of the data set. By default it is 1/20 of the
 %               range of the points. You may change this default by using
 %               this parameter.
 %               'fraction_to_increase_range','fractiontoincreaserange'
-%__________________________________________________________________________ 
+%__________________________________________________________________________
 % Note the following sytax may also be used to specify 'graphtype'
 %         'loglog','log','powerlaw'
 %         'logx','logarithmic'
 %         'logy','exponential','exp'
 %         'linear','lin'
-%__________________________________________________________________________ 
+%__________________________________________________________________________
 % Notes:
 % The notes here will explain what the output means in terms of fitting
 % functions depending on which method you use,
-% 
+%
 % A power law relationship
 % [slope, intercept] = logfit(x,y,'loglog');
 %            yApprox = (10^intercept)*x.^(slope);
-% 
+%
 % An exponential relationship
 % [slope, intercept] = logfit(x,y,'logy');
 %            yApprox = (10^intercept)*(10^slope).^x;
-% 
+%
 % A logarithmic relationship
 % [slope, intercept] = logfit(x,y,'logx');
 %            yApprox = (intercept)+(slope)*log10(x);
-% 
+%
 % A linear relationship
 % [slope, intercept] = logfit(x,y,'linear');
 %            yApprox = (intercept)+(slope)*x;
-% 
-%__________________________________________________________________________ 
+%
+%__________________________________________________________________________
 % Examples:
 % A power law, power 'a'
 % a=2;
 % x=(1:20)+rand(1,20); y=x.^a;
 % power = logfit(x,y);
-% % 
-% A exponential relationship 
+% %
+% A exponential relationship
 % a=3; x=(1:30)+10*rand(1,30); y=a.^x+100*rand(1,30);
 % [graphType a] = logfit(x,y)
 % base = 10^(a)
-% 
+%
 % Thanks to Aptima inc. for  for giving me a reason to write this function.
 % Thanks to Avi and Eli for help with designing and testing logfit.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -130,7 +130,7 @@ k=1;
 if isempty(varargin)
     [slope, intercept,MSE, R2, S, extra] = findBestFit(x,y);
     return;
-    
+
 else % interpret all these possible user parameters here, so we can be more specific later.
     switch lower(varargin{1}); % make all lowercase in case someone put in something different.
         case {'logy','exponential','exp'}
@@ -141,7 +141,7 @@ else % interpret all these possible user parameters here, so we can be more spec
             graphType = 'loglog';
         case {'linear','lin'}
             graphType = 'linear';
-        otherwise            
+        otherwise
             [slope, intercept, MSE, R2, S, extra] = findBestFit(x,y,varargin{:});
             return;
     end
@@ -185,7 +185,7 @@ lineStyle = '--';
 
 while k <= length(varargin) && ischar(varargin{k})
     switch (lower(varargin{k}))
-%       skipping points from beginning or end        
+%       skipping points from beginning or end
         case {'skip','num2skip'}
             num2skip = varargin{k+1};
             k = k + 1;
@@ -205,8 +205,8 @@ while k <= length(varargin) && ischar(varargin{k})
         case {'ftir','fraction_to_increase_range','fractiontoincreaserange'}
             ftir = varargin{k+1};
             k = k+1;
-            
-%       Plotting style parameters        
+
+%       Plotting style parameters
         case {'color'}
             markerColor = varargin{k+1};
             lineColor = varargin{k+1};
@@ -239,7 +239,7 @@ end
 
 % data size and skip related errors/warnings
     % Check they skipped an integer number of rows.
-    if round(skipBegin)~=skipBegin || round(skipEnd)~=skipEnd || round(num2skip)~=num2skip 
+    if round(skipBegin)~=skipBegin || round(skipEnd)~=skipEnd || round(num2skip)~=num2skip
         error('you can only skip an integer number of data rows');
     end
     if (skipEnd~=0 || skipBegin~=0) && num2skip~=0
@@ -262,8 +262,8 @@ end
     if length(x)<3+skipEnd+skipBegin
         warning('your data are meaningless, please go collect more points');
     end
-    
-% Data formatting errors and warnings    
+
+% Data formatting errors and warnings
     % Check that 'x' is a vector
     if size(x,1)>1 && size(x,2)>1 % something is wrong
         error('Your x values must be a vector, it cannot be a matrix');
@@ -278,7 +278,7 @@ end
             error('the length of ''x'' must equal the length of y');
         end
     end
-    
+
     if ~isnumeric(markerSize)
         error('marker size must be numeric');
     end
@@ -301,7 +301,7 @@ if yIsMatrixFlag % There is more than one data point per x value
 % note the '+1' so it can be used as an index value
 % This is the ones that will be used for fitting, rather than for plotting.
     y2fit = y(skipBegin+1:end-skipEnd,:);
-    
+
     [x2fit,y2fit]= linearify(x2fit,y2fit);
     [x,y]        = linearify(x,y);
 
@@ -314,14 +314,14 @@ end
 %% Check here for data that is zero or negative on a log scaled axis.
 % This is a problem because log(z<=0) is not a real number
 % This cell will remove it with a warning and helpful suggestion.
-% 
+%
 % This warning can suggest you choose a different plot, or perhaps add 1 if
 % your data are large enough.
-% 
+%
 % Note that this is done in order, so if by removing the 'y==0' values, you
 % also delete the 'x==0' values, then the 'x' warning won't show up. I
 % don't think this is of any concern though.
-% 
+%
 switch graphType
     case {'logy','loglog'}
         yMask=(y<=0);
@@ -331,7 +331,7 @@ switch graphType
                 warning(['values with y<=0 were removed.'...
                          'Are you sure that ''logy'' is smart to take? '...
                          'some ''y'' values were negative in your data.']);
-            
+
             else % just some zero values
                 if sum(y<10)/length(y) < (1/2) % if less than half your data is below than 10.
                     warning(['values with y==0 were removed. '...
@@ -340,9 +340,9 @@ switch graphType
                     warning(['values with y==0 were removed. '...
                              'Nothing you can really do about it sorry.']);
                 end
-                
+
             end
-            
+
             y=y(~yMask); y2Mask=(y2fit<=0); y2fit=y2fit(~y2Mask);
             x=x(~yMask);                    x2fit=x2fit(~y2Mask);
 %             warning('values with y<=0 were removed. It may make suggest you add 1 to your data.')
@@ -353,13 +353,13 @@ switch graphType
     case {'logx','loglog'}
         xMask=(x<=0);
         if sum(xMask)>0
-            
+
             xNegMask=(x<0);
             if sum(xNegMask)>0 % there are proper negative values
                 warning(['values with x<=0 were removed.'...
                          'Are you sure that ''logx'' is smart to take? '...
                          'some ''x'' values were negative in your data.']);
-            
+
             else % just some zero values
                 if sum(x<10)/length(x) < (1/2) % if less than half your data is below than 10.
                     warning(['values with x==0 were removed. '...
@@ -368,9 +368,9 @@ switch graphType
                     warning(['values with x==0 were removed. '...
                              'Nothing you can really do about it sorry.']);
                 end
-                
+
             end
-            
+
             x=x(~xMask); x2Mask=(x2fit<=0); x2fit=x2fit(~x2Mask);
             y=y(~xMask);                    y2fit=y2fit(~x2Mask);
         end
@@ -429,7 +429,7 @@ switch graphType
 
     otherwise % logy, linear
         totRange=diff(range);
-        range= [range(1)-totRange/ftir, range(2)+totRange/ftir];        
+        range= [range(1)-totRange/ftir, range(2)+totRange/ftir];
         ex=linspace(range(1),range(2),100);
 end
 
@@ -461,10 +461,10 @@ MSE = mean((logY-estY).^2); % mean squared error.
 
 %     COVyhaty    = cov(estY,y); % = cov(estimated values, experimental values)
 %     R2        = (COVyhaty(2).^2) ./(var(estY).*var(y));
-%     
+%
 tmp = corrcoef(estY,y2fit).^2;
 R2 = tmp(2);
-    
+
 %% Ready the axis for plotting
 % create or grab an axis before setting the scales
 a=gca;
@@ -482,7 +482,7 @@ plot(ex,yy,lineStyle,'linewidth',lineWidth,'color',lineColor);
 %% Plot the points
 % This time again just so it appears on top of the other line.
 h = plot(x,y,markerType,'markersize',markerSize,'linewidth',2,'color',markerColor);
-set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off'); 
+set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
 
 %% Set the axis and to scale correctly
 switch graphType
@@ -501,7 +501,8 @@ end
 % no idea why this is always needed
 axis('tight');
 
-legend('data',[graphType ' fit'],'location','best'); legend('boxoff');
+% Commented out by Geert.
+% legend('data',[graphType ' fit'],'location','best'); legend('boxoff');
 
 % reset hold state
 if ~holdState
@@ -528,7 +529,7 @@ y=y(:);
 % if length(y)~=length(x)
 %     warning(['Look what you doin son, the length of ''x'' must equal the '...
 %            'number of rows in y to make this function useful'           ]);
-% end    
+% end
 end
 
 %% this checks to see which type of plot has the smallest error
