@@ -473,15 +473,15 @@ holdState=ishold;
 
 %% Plot the data
 % This one is just to get the legend right
-plot(x,y,markerType,'markersize',markerSize,'linewidth',2,'color',markerColor);
+plot(x,y,markerType,'linewidth',2,'color',markerColor);
 
 %% Plot the approximate line
 hold('on'); % in case hold off was on before
-plot(ex,yy,lineStyle,'linewidth',lineWidth,'color',lineColor);
+plot(ex,yy,lineStyle,'color',lineColor);
 
 %% Plot the points
 % This time again just so it appears on top of the other line.
-h = plot(x,y,markerType,'markersize',markerSize,'linewidth',2,'color',markerColor);
+h = plot(x,y,markerType,'linewidth',2,'color',markerColor);
 set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
 
 %% Set the axis and to scale correctly

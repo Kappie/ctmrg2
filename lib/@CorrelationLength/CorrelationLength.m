@@ -16,7 +16,7 @@ classdef CorrelationLength < Quantity
 
 
 
-      eigenvalues = eigs(transfer_matrix, 2);
+      eigenvalues = sort(eigs(transfer_matrix, 2), 'descend');
       value = 1 / log(eigenvalues(1) / eigenvalues(2));
     end
   end
