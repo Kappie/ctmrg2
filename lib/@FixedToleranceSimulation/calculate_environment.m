@@ -16,6 +16,12 @@ function [C, T, convergence, N, converged] = calculate_environment(obj, temperat
   end
 
   if ~converged
-    fprintf('DID NOT CONVERGE.')
+    log_to_file(temperature, chi, tolerance, obj.MAX_ITERATIONS);
   end
+end
+
+function log_to_file(temperature, chi, tolerance, N)
+  fileID = fopen('not_converged.log', 'a');
+  fprintf(fileID, 'temperature = %f, chi = %f, tolerance = %g, max iterations = %f at %s.\n', temperature, chi, tolerance, N, datestr(now));
+  fclose(fileID);
 end

@@ -3,7 +3,7 @@ function main
 
   % plot_m_vs_chi
   % data_collapse_N
-  data_collapse_chi
+  % data_collapse_chi
   % perform_error_estimate_chi
   % plot_correlation_length
   % scaling_function_argument
@@ -16,4 +16,6 @@ function main
   % data_collapse_chi_power_law
   % plot_N_vs_chi
   % plot_chi_vs_m
+  % plot_tolerance
+  measure_corr_length
 end

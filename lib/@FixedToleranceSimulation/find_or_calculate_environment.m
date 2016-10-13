@@ -14,7 +14,7 @@ function tensor_struct = find_or_calculate_environment(obj, temperature, chi, to
     'WHERE temperature = ? AND chi = ? AND convergence >= ? ' ...
     'ORDER BY convergence ASC ' ...
     'LIMIT 1'];
-  query_result = sqlite3.execute(query, temperature, chi, tolerance);
+  query_result = sqlite3.execute(obj.db_id, query, temperature, chi, tolerance);
 
   if isempty(query_result) || ~obj.LOAD_FROM_DB
     display('Did not find a matching record.');

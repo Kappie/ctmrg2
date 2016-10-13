@@ -9,7 +9,7 @@ function tensor_struct = find_or_calculate_environment(obj, temperature, chi, N)
     'WHERE temperature = ? AND chi = ? AND n <= ? ' ...
     'ORDER BY n DESC ' ...
     'LIMIT 1'];
-  query_result = sqlite3.execute(query, temperature, chi, N);
+  query_result = sqlite3.execute(obj.db_id, query, temperature, chi, N);
 
   if isempty(query_result) || ~obj.LOAD_FROM_DB
     display('Did not find record');

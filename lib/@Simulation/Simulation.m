@@ -4,6 +4,7 @@ classdef (Abstract) Simulation
 
   properties
     DATABASE = fullfile(Constants.DB_DIR, 'tensors.db');
+    db_id;
     LOAD_FROM_DB = true;
     SAVE_TO_DB = true;
     temperatures;
