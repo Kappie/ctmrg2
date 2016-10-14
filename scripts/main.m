@@ -16,6 +16,6 @@ function main
   % data_collapse_chi_power_law
   % plot_N_vs_chi
   % plot_chi_vs_m
-  % plot_tolerance
-  measure_corr_length
+  plot_tolerance
+  % measure_corr_length
 end

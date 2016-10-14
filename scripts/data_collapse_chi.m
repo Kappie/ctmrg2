@@ -1,7 +1,7 @@
 function data_collapse_chi
-  chi_values = [8, 16, 24, 32];
+  chi_values = [6, 8];
   x_start = 0.06; x_end = 0.3;
-  tolerances = [1e-8];
+  tolerances = [1e-11];
 
   DATABASE = fullfile(Constants.DB_DIR, 'scaling_function.db');
 
@@ -18,6 +18,8 @@ function data_collapse_chi
     sim = FixedToleranceSimulation(temperatures(chi), [chi], tolerances).run();
     order_parameters(chi) = sim.compute(OrderParameter);
     correlation_lengths(chi) = sim.compute(CorrelationLength);
+    display(chi)
+    display(correlation_lengths(chi))
   end
 
 
@@ -34,12 +36,15 @@ function data_collapse_chi
     temperatures_chi = temperatures(chi);
     correlation_lengths_chi = correlation_lengths(chi);
     order_parameters_chi = order_parameters(chi);
+    T_pseudocrit = Constants.T_pseudocrit(chi);
 
     x_values = zeros(1, numel(temperatures_chi));
     scaling_function_values = zeros(1, numel(temperatures_chi));
 
     for t = 1:numel(temperatures_chi)
-      x_values(t) = Constants.reduced_T(temperatures_chi(t)) * correlation_lengths_chi(t)^(1/nu);
+      % x_values(t) = Constants.reduced_T_dot(temperatures_chi(t), T_pseudocrit) * correlation_lengths_chi(t)^(1/nu);
+      % x_values(t) = Constants.reduced_T(temperatures_chi(t)) * correlation_lengths_chi(t)^(1/nu);
+      x_values(t) = correlation_lengths_chi(t) / Constants.correlation_length(temperatures_chi(t));
       scaling_function_values(t) = order_parameters_chi(t) * correlation_lengths_chi(t)^(beta/nu);
     end
 

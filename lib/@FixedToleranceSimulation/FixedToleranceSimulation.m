@@ -1,6 +1,5 @@
 classdef FixedToleranceSimulation < Simulation
   properties
-    tolerances;
     MAX_ITERATIONS = 2e6;
   end
 

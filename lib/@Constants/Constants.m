@@ -37,5 +37,9 @@ classdef Constants
       c = 1/2;
       k = 6 / (c*(1 + sqrt(12/c)));
     end
+
+    function xi = correlation_length(T)
+      xi = -1 / (log(sinh(2*(1/T))));
+    end
   end
 end

@@ -4,7 +4,7 @@ function [C, T, convergence] = calculate_environment(obj, temperature, chi, N, i
   singular_values = obj.initial_singular_values(chi);
 
   convergences = zeros(1, N);
-  tolerance = 1e-9;
+  tolerance = 1e-10;
   hickups_in_a_row = 0;
 
   for iteration = 1:N
@@ -33,7 +33,8 @@ function [C, T, convergence] = calculate_environment(obj, temperature, chi, N, i
 
   end
 
-  markerplot(1:100:N, convergences(1:100:N), 'semilogy')
+  semilogy(1:100:N, convergences(1:100:N))
 
+  % This does NOT belong to the temporary code and should STAY.
   convergence = obj.calculate_convergence(singular_values, singular_values_old, chi);
 end

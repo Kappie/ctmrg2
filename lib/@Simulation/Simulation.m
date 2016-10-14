@@ -9,6 +9,8 @@ classdef (Abstract) Simulation
     SAVE_TO_DB = true;
     temperatures;
     chi_values;
+    N_values;
+    tolerances;
     tensors;
   end
 
