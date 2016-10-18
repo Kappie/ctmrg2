@@ -1,3 +1,3 @@
 function markers = markers()
-  markers = ['o','*','s','d','^','v','>','<','p','h', '.'];
+  markers = ['o','d','s','*','^','v','>','<','p','h', '.'];
 end

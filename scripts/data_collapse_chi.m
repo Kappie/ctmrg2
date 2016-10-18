@@ -1,13 +1,14 @@
 function data_collapse_chi
-  chi_values = [6, 8];
-  x_start = 0.06; x_end = 0.3;
-  tolerances = [1e-11];
+  chi_values = [34, 46];
+  % x_start = 0.06; x_end = 0.3;
+  % x_values = linspace(0.1, 0.2, 10);
+  x_values = linspace(0.06666666, 0.2, 10);
+  tolerances = [1e-9];
 
   DATABASE = fullfile(Constants.DB_DIR, 'scaling_function.db');
 
-  % calculate_corresponding_temperatures(x_values, chi_values, DATABASE);
+  calculate_corresponding_temperatures(x_values, chi_values, DATABASE);
   % temperatures = retrieve_corresponding_temperatures(x_values, chi_values, DATABASE);
-
 
   temperatures = retrieve_all_temperatures(x_start, x_end, chi_values, DATABASE);
 
@@ -18,8 +19,6 @@ function data_collapse_chi
     sim = FixedToleranceSimulation(temperatures(chi), [chi], tolerances).run();
     order_parameters(chi) = sim.compute(OrderParameter);
     correlation_lengths(chi) = sim.compute(CorrelationLength);
-    display(chi)
-    display(correlation_lengths(chi))
   end
 
 
@@ -31,32 +30,39 @@ function data_collapse_chi
   figure
   hold on
   marker_index = 1;
+  legend_labels = {};
 
   for chi = chi_values
-    temperatures_chi = temperatures(chi);
-    correlation_lengths_chi = correlation_lengths(chi);
-    order_parameters_chi = order_parameters(chi);
-    T_pseudocrit = Constants.T_pseudocrit(chi);
+    for tol = 1:numel(tolerances)
+      temperatures_chi = temperatures(chi);
+      correlation_lengths_chi = correlation_lengths(chi);
+      order_parameters_chi = order_parameters(chi);
+      T_pseudocrit = Constants.T_pseudocrit(chi);
 
-    x_values = zeros(1, numel(temperatures_chi));
-    scaling_function_values = zeros(1, numel(temperatures_chi));
+      x_values = zeros(1, numel(temperatures_chi));
+      scaling_function_values = zeros(1, numel(temperatures_chi));
 
-    for t = 1:numel(temperatures_chi)
-      % x_values(t) = Constants.reduced_T_dot(temperatures_chi(t), T_pseudocrit) * correlation_lengths_chi(t)^(1/nu);
-      % x_values(t) = Constants.reduced_T(temperatures_chi(t)) * correlation_lengths_chi(t)^(1/nu);
-      x_values(t) = correlation_lengths_chi(t) / Constants.correlation_length(temperatures_chi(t));
-      scaling_function_values(t) = order_parameters_chi(t) * correlation_lengths_chi(t)^(beta/nu);
+      for t = 1:numel(temperatures_chi)
+        % x_values(t) = Constants.reduced_T_dot(temperatures_chi(t), T_pseudocrit) * correlation_lengths_chi(t)^(1/nu);
+        % x_values(t) = Constants.reduced_T(temperatures_chi(t)) * correlation_lengths_chi(t, tol)^(1/nu);
+        x_values(t) = Constants.reduced_T(temperatures_chi(t)) * correlation_lengths_chi(t)^(1/nu);
+        % x_values(t) = correlation_lengths_chi(t, tol) / Constants.correlation_length(temperatures_chi(t));
+        % scaling_function_values(t) = order_parameters_chi(t, tol) * correlation_lengths_chi(t, tol)^(beta/nu);
+        scaling_function_values(t) = order_parameters_chi(t) * correlation_lengths_chi(t)^(beta/nu);
+      end
+
+      marker = MARKERS(marker_index);
+      plot(x_values, scaling_function_values, marker);
+      marker_index = marker_index + 1;
+      % legend_labels{end + 1} = ['$\chi$ = ' num2str(chi) ' tol = ' num2str(tolerances(tol))];
     end
-
-    marker = MARKERS(marker_index);
-    plot(x_values, scaling_function_values, marker);
-    marker_index = marker_index + 1;
   end
 
   make_legend(chi_values, '\chi')
   xlabel('$t\xi(\chi, T)^{1/\nu}$');
   ylabel('$m(T, \chi)\xi(\chi,T)^{\beta/\nu}$')
   title(['Tolerance  = $10^{' num2str(mantexpnt(tolerances(1))) '}$'])
+  legend(legend_labels)
   % title('Scaling ansatz for $\xi(\chi, T)$. Tolerance = $10^{-7}$. $|T - T_c| < 0.05$.')
 end
 
@@ -65,7 +71,7 @@ end
 function calculate_corresponding_temperatures(x_values, chi_values, db)
   db_id = sqlite3.open(db);
 
-  max_err = 1e-3;
+  max_err = 1e-4;
   % round to 5 decimal places; the x coordinate doesn't matter to high precision
   % in a data collapse.
   x_values = arrayfun(@(x) round(x, 5), x_values);
@@ -102,7 +108,7 @@ function calculate_corresponding_temperatures(x_values, chi_values, db)
     end
   end
 
-  sqlite3.close(DATABASE);
+  sqlite3.close(db);
 end
 
 function store_to_db(x, temperature, chi, err, max_err, db_id)
