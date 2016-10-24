@@ -33,7 +33,7 @@ classdef (Abstract) Simulation
   methods(Static)
     % I put grow_lattice in a separate file grow_lattice.m with helper functions, so I have
     % to declare it here in order to make it Static (otherwise it would be public).
-    [C, T, singular_values, truncation_error] = grow_lattice(temperature, chi, C, T);
+    [C, T, singular_values, truncation_error, full_singular_values] = grow_lattice(temperature, chi, C, T);
 
     function C = initial_C(temperature)
       C = Util.spin_up_initial_C(temperature);

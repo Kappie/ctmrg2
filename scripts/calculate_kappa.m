@@ -8,16 +8,17 @@ function calculate_kappa
   sim = FixedToleranceSimulation(temperatures, chi_values, tolerances);
   % sim.SAVE_TO_DB = false; sim.LOAD_FROM_DB = false;
   sim = sim.run();
-  corr_lengths = sim.compute(CorrelationLength);
+  % corr_lengths = sim.compute(CorrelationLength);
   % load('correlation_lengths_chi6-60.mat', 'corr_lengths')
-  save('correlation_lengths_chi4-46_tol1e-7.mat', 'corr_lengths')
+  load('correlation_lengths_chi4-46_tol1e-7.mat', 'corr_lengths')
   % load('correlation_lengths_chi16-64.mat', 'corr_lengths')
   % order_params = sim.compute(OrderParameter);
 
   % [total_slope1, ~] = logfit(chi_values, order_params, 'loglog')
-  [total_slope2, ~] = logfit(chi_values, corr_lengths, 'loglog')
+  [slope, intercept] = logfit(chi_values, corr_lengths, 'loglog')
   xlabel('$\chi$')
   ylabel('$\xi(\chi)$')
+  legend({'data', ['$\kappa$ = ' num2str(total_slope2)]}, 'Location', 'best')
   % xticks(chi_values)
   % slope; %    1.940045384131416
   % METHOD 1: calculate by scaling of correlation length at T_crit

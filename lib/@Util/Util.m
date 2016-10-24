@@ -81,5 +81,9 @@ classdef Util
       C = getArrayFromByteStream(record.c);
       T = getArrayFromByteStream(record.t);
     end
+
+    function Ts = linspace_around_T_crit(width, number_of_points)
+      Ts = linspace_around(Constants.T_crit, width, number_of_points);
+    end
   end
 end

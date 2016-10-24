@@ -1,11 +1,11 @@
-function [C, T, singular_values, truncation_error] = grow_lattice(temperature, chi, C, T)
+function [C, T, singular_values, truncation_error, full_singular_values] = grow_lattice(temperature, chi, C, T)
   a = Util.construct_a(temperature);
   % Final order is specified so that the new tensor is ordered according to
   % [d, chi, d, chi], with the pairs of d, chi corresponding to what will be the reshaped
   % legs of the new C.
   C = ncon({C, T, T, a}, {[1, 2], [3, 1, -1], [4, 2, -2], [3, -3, -4, 4]}, ...
   [1, 2, 3, 4], [-3 -1 -4 -2]);
-  [U, s, U_transpose, truncation_error] = tensorsvd(C, [1 2], [3 4], chi, 'n');
+  [U, s, U_transpose, truncation_error, full_singular_values] = tensorsvd(C, [1 2], [3 4], chi, 'n');
   % Here, we only take the chi most relevant eigenvectors.
   C = ncon({C, U_transpose, U}, {[1 2 3 4], [1 2 -1], [3 4 -2]});
 

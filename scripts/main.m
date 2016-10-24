@@ -18,5 +18,10 @@ function main
   % plot_chi_vs_m
   % plot_tolerance
   % measure_corr_length
-  plot_ctm
+  % plot_ctm
+  % plot_truncation_error
+  scaling_coordinate
+  % test_order_param_strip
+  % test_order_param_strip2
+  % plot_eigenvalues_transfer_matrix
 end

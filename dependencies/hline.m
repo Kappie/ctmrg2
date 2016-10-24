@@ -82,9 +82,11 @@ else
 
     g=ishold(gca);
     hold on
+    greys = brewermap(9, 'Greys');
+    color = greys(8, :);
 
     x=get(gca,'xlim');
-    h=plot(x,[y y],linetype);
+    h=plot(x,[y y],linetype, 'color', color);
     if ~isempty(label)
       yy=get(gca,'ylim');
       yrange=yy(2)-yy(1);
@@ -92,9 +94,9 @@ else
       % Changed from 0.02 to 0.03
       label_upper_margin = 0.03;
       if yunit<0.2
-          text(x(1)+label_upper_margin*(x(2)-x(1)),y+label_upper_margin*yrange,label,'color',get(h,'color'))
+          text(x(1)+label_upper_margin*(x(2)-x(1)),y+label_upper_margin*yrange,label,'color',color)
       else
-          text(x(1)+label_upper_margin*(x(2)-x(1)),y-label_upper_margin*yrange,label,'color',get(h,'color'))
+          text(x(1)+label_upper_margin*(x(2)-x(1)),y-label_upper_margin*yrange,label,'color',color)
       end
     end
     if g==0

@@ -1,4 +1,4 @@
-function [u, s, v, truncation_error]=tensorsvd(T,ll,rl,n,absorb,cut)
+function [u, s, v, truncation_error, full_singular_values]=tensorsvd(T,ll,rl,n,absorb,cut)
 %[u,s,v]=tensorsvd(T,ll,rl,n,absorb,cut)
 %do svd for a tensor
 %T: tensor
@@ -30,7 +30,7 @@ if(nargin<6)
 end
 
 %Default:
-[u, s, v, truncation_error]=svdsabsorb(Tm,n,absorb,cut);
+[u, s, v, truncation_error, full_singular_values]=svdsabsorb(Tm,n,absorb,cut);
 
 ss=size(u);
 u=reshape(u,[dl,ss(2)]);

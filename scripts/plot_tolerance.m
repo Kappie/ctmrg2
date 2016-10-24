@@ -1,6 +1,7 @@
 function plot_tolerance
-  temperatures = [Constants.T_crit];
-  chi_values = [8, 16, 24, 32];
+  chi = 16;
+  temperatures = [Constants.T_pseudocrit(chi)];
+  chi_values = [chi];
   N_values = [1000000];
 
   sim = FixedNSimulation(temperatures, chi_values, N_values);

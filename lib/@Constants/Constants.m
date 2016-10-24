@@ -33,6 +33,10 @@ classdef Constants
       t = Constants.reduced_T_dot(T, Constants.T_crit);
     end
 
+    function ts = reduced_Ts(temperatures)
+      ts = arrayfun(@Constants.reduced_T, temperatures);
+    end
+
     function k = kappa()
       c = 1/2;
       k = 6 / (c*(1 + sqrt(12/c)));
@@ -40,6 +44,14 @@ classdef Constants
 
     function xi = correlation_length(T)
       xi = -1 / (log(sinh(2*(1/T))));
+    end
+
+    function m = order_parameter(temperature)
+      if temperature < Constants.T_crit
+        m = (1 - sinh(2*(1/temperature)).^-4).^(1/8);
+      else
+        m = 0;
+      end
     end
   end
 end

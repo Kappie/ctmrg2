@@ -1,4 +1,4 @@
-function [u, s, v, truncation_error]=svdsabsorb(T,n,mode,cut)
+function [u, s, v, truncation_error, full_singular_values]=svdsabsorb(T,n,mode,cut)
 %T input matrix
 %n: number of singular values (set inf for all)
 %mode: 'l': left absorb
@@ -33,6 +33,7 @@ n=min(n,size(s,1));
 %check cutoff: truncate very small singular values
 ds=diag(s);
 truncation_error = compute_truncation_error(ds, n);
+full_singular_values = ds;
 ds=ds(1:n);
 icut=find(ds/max(ds)<cut,1);
 if(~isempty(icut))

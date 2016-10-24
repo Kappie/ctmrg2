@@ -1,6 +1,6 @@
 function hhh=vline(x,in1,in2)
 % function h=vline(x, linetype, label)
-% 
+%
 % Draws a vertical line on the current axes at the location specified by 'x'.  Optional arguments are
 % 'linetype' (default is 'r:') and 'label', which applies a text label to the graph near the line.  The
 % label appears in the same color as the line.
@@ -83,16 +83,19 @@ else
     g=ishold(gca);
     hold on
 
+    greys = brewermap(9, 'Greys');
+    color = greys(8, :);
+
     y=get(gca,'ylim');
-    h=plot([x x],y,linetype);
+    h=plot([x x],y,linetype, 'color', color);
     if length(label)
         xx=get(gca,'xlim');
         xrange=xx(2)-xx(1);
         xunit=(x-xx(1))/xrange;
         if xunit<0.8
-            text(x+0.01*xrange,y(1)+0.1*(y(2)-y(1)),label,'color',get(h,'color'))
+            text(x+0.01*xrange,y(1)+0.1*(y(2)-y(1)),label,'color',color)
         else
-            text(x-.05*xrange,y(1)+0.1*(y(2)-y(1)),label,'color',get(h,'color'))
+            text(x-.05*xrange,y(1)+0.1*(y(2)-y(1)),label,'color',color)
         end
     end
 
